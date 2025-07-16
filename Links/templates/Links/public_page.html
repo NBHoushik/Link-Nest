@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>Document</title>
+</head>
+<body>
+  
+  <table>
+    <thead>
+      <th>{{username}} Links</th>
+    </thead>
+    <tbody>
+      {%for link in links%}
+      <tr>
+        <td>
+          <a href="{{link.link}}">
+            <button>{{link.name}}</button>
+          </a>
+          {{link.description}}
+        </td>
+      </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+</body>
+</html>

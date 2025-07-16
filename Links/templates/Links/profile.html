@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>profile</title>
+</head>
+<body>
+  {{username}}
+<!-- Adding new link -->
+  <form method="post" action="{%url 'add_link_page' username%}">
+    {%csrf_token%}
+    <button type="submit">Add Links</button>
+  </form>
+<!-- public link -->
+    <div>
+      <input id="link" value="http://127.0.0.1:8000/u/{{username}}/" readonly>
+      <button onclick="copyLink()">copy</button>
+      <div id="message"></div>
+      <!-- Generating qr code -->
+      <p>Your Qr</p>
+      <img src="{%url 'qr_code' username%}" alt="Qrcode" width="100px" id="Qr">
+      <button onclick="Download_Qr()">Download_Qr</button>
+      <!-- previewing public page -->
+      <a href="{%url 'link_nest' username%}">
+        <button >preview-page</button>
+      </a>
+    </div>
+<!-- Existing links -->
+  <table border="1px">
+    <thead>
+      <th>Your Links</th>
+    </thead>
+    <tbody>
+      {%for link in user_links%}
+      <tr>
+        <td>
+          <a href="{{link.link}}">
+          <button>{{link.name}}</button>
+          </a>
+          {{link.description}}
+          <form method="post" action="{%url 'delete_update' link.id%}">
+            {%csrf_token%}
+            <button type="submit" value="update" name="action">update</button>
+            <button type="submit" value="delete" name="action">delete</button>
+          </form>
+        </td>  
+      </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+
+  <!-- js code to copy the link to clipboard -->
+   <script>
+    function copyLink(){
+      const link=document.getElementById("link").value;
+      navigator.clipboard.writeText(link)
+      const msg=document.getElementById("message");
+      msg.innerText="copied-to-clipboard"
+    }
+    function Download_Qr(){
+      const img=document.getElementById("Qr");
+      const a=document.createElement('a');
+      a.href=img.src;
+      a.download="qr_{{username}}.png";
+      document.body.appendChild(a);
+      a.click()
+      document.body.removeChild('a');
+    }
+   </script>
+</body>
+</html>

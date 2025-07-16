@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>update-page</title>
+</head>
+<body>
+  <form method="post" action="{%url 'update' link.id%}">
+    {%csrf_token%}
+    <label for="">Link-name :</label>
+    <input type="text" value="{{link.name}}" name="name"><br><br>
+    <label for="">url :</label>
+    <input type="url" value="{{link.link}}" name="link"><br><br>
+    <label for="">Description :</label>
+    <textarea name="description" placeholder="comment"></textarea>
+    <button type="submit">update</button>
+  </form>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>Signup</title>
+</head>
+<body>
+  <h1>Signup Here</h1>
+  
+  <form method="post" action="{%url 'register_user'%}">
+    {%csrf_token%}
+    <label for="">Username</label>
+    <input type="text" name="username"><br><br>
+    <label for="">Email</label>
+    <input type="email" name="email"><br><br>
+    <label for="">Password</label>
+    <input type="password" name="password"><br><br>
+    <button type="submit">submit</button>
+  </form>
+  {%if messages%}
+    {%for message in messages%}
+      {{message}}
+    {%endfor%}
+  {%endif%}
+</body>
+</html>

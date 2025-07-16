@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>Document</title>
+</head>
+<body>
+  <h1>Add Links {{username}}</h1>
+  <form method="POST" action="{%url 'add_link' username%}">
+    {%csrf_token%}
+    <label for="">Name :</label>
+    <input type="text" name="linkname"><br><br>
+    <label for="">Link/Url :</label>
+    <input type="url" name="link"><br><br>
+    <label for="">Description :</label>
+    <Textarea name="description" placeholder="comment"></Textarea><br><br>
+    <button type="submit">ADD</button>
+  </form><br>
+  {%if messages%}
+    {%for message in messages%}
+      <span>{{message}}</span>
+    {%endfor%}
+  {%endif%}
+  <br><br>
+  <form method="post" action="{%url  'profile_page' username%}">
+    {%csrf_token%}
+    <button type="submit">Back-to-profile</button>
+  </form>
+</body>
+</html>
