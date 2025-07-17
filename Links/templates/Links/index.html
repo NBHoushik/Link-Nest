@@ -3,22 +3,30 @@
 <head>
 
   <title>Index</title>
+  {%load static%}
+  <link rel="stylesheet" href="{%static 'css/index.css'%}">
+  <!-- font dancing -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>Welcome to Link-Nest</h1>
-  {%if messages%}
+  <div>
+  <h1 class="heading">Link-Nest</h1>
+  <h3>>>All Links at OnePlace</h3>
+  
+  <form method="post" action="{%url 'profile_check'%}">
+    {%if messages%}
     {%for message in messages%}
       <p>{{message}}</p>
     {%endfor%}
   {%endif%}
-  <form method="post" action="{%url 'profile_check'%}">
     {%csrf_token%}
-    <label for="">Username :</label>
+    <label for="username">Username (or) Email :</label><br>
     <input type="text" name="username"><br><br>
-    <label for="">Password :</label>
-    <input type="password"><br><br>
-    <button type="submit">Login</button><br><br>
+    <label for="password">Password :</label><br>
+    <input type="password" name="password"><br><br>
+    <button type="submit" class="submit_button">Login</button><br><br>
     Don't have accout?<a href="{%url 'signup'%}">Signup</a>
   </form>
+  </div>
 </body>
 </html>

@@ -2,6 +2,7 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from .models import User,Link
+from django.contrib.auth import authenticate, login
 # used for qr code
 import qrcode
 from io import BytesIO
@@ -21,11 +22,19 @@ def profile_check(request):
   if request.method=="POST":
     username=request.POST.get("username")
     password=request.POST.get("password")
-    if User.objects.filter(username=username).exists():  
-      return redirect('profile_page',username)
-    else:
+
+    if User.objects.filter(username=username,password=password).exists() or User.objects.filter(email=username,password=password):
+        try:
+          user=get_object_or_404(User,username=username)
+          username=user.username
+        except:
+          user=get_object_or_404(User,email=username)
+          username=user.username
+        return redirect('profile_page', username)
+    else:   
       messages.error(request,"username or password is wrong")
       return redirect('index')
+  return redirect('index')
 #adding new user to database and checking for if user laredy exists 
 def register_user(request):
   if request.method=="POST":
