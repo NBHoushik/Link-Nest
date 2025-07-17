@@ -29,7 +29,7 @@ def profile_check(request):
         except:
           user=get_object_or_404(User,email=username)
           username=user.username
-        return redirect('profile_page', username)
+        return redirect('profile_page',username)
     else:   
       messages.error(request,"username or password is wrong")
       return redirect('index')
@@ -53,11 +53,11 @@ def register_user(request):
   
 
 
-#showing links along with user name
+#showing links along with user data
 def profile_page(request,username):
   user=get_object_or_404(User,username=username)
   user_links=Link.objects.filter(user=user)
-  return render(request,"Links/profile.html",{"user_links":user_links,"username":username})
+  return render(request,"Links/profile.html",{"user_links":user_links,"username":username,"request":request})
 
 #adding new links page
 def add_link_page(request,username):

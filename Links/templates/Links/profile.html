@@ -16,7 +16,7 @@
   </form>
 <!-- public link -->
     <div>
-      <input id="link" value="http://127.0.0.1:8000/u/{{username}}/" readonly>
+      <input id="link" value="{{request.scheme}}://{{request.get_host}}/u/{{username}}/" readonly>
       <button onclick="copyLink()">copy</button>
       <div id="message"></div>
       <!-- Generating qr code -->
