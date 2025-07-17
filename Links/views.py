@@ -22,7 +22,6 @@ def profile_check(request):
   if request.method=="POST":
     username=request.POST.get("username")
     password=request.POST.get("password")
-
     if User.objects.filter(username=username,password=password).exists() or User.objects.filter(email=username,password=password):
         try:
           user=get_object_or_404(User,username=username)
@@ -41,12 +40,16 @@ def register_user(request):
     username=request.POST.get("username")
     email=request.POST.get("email")
     password=request.POST.get("password")
+    if username=="" or password=="":
+      messages.error(request,"Enter valid data")
+      return redirect('signup')
     if User.objects.filter(username=username).exists():
-      messages.error(request,"User already Exists")
+      messages.error(request,"Username already Exists")
       return redirect('signup')
     else:
       User.objects.create(username=username,email=email,password=password)
-  return redirect('home')
+      return redirect('index')
+  return redirect('index')
   
 
 

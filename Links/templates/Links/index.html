@@ -4,21 +4,15 @@
 
   <title>Index</title>
   {%load static%}
-  <link rel="stylesheet" href="{%static 'css/index.css'%}">
+  <link rel="stylesheet" href="{%static 'links/css/index.css'%}">
   <!-- font dancing -->
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div>
   <h1 class="heading">Link-Nest</h1>
-  <h3>>>All Links at OnePlace</h3>
-  
-  <form method="post" action="{%url 'profile_check'%}">
-    {%if messages%}
-    {%for message in messages%}
-      <p>{{message}}</p>
-    {%endfor%}
-  {%endif%}
+  <h3>>>Centrelise your links</h3> 
+  <form method="post" action="{%url 'profile_check'%}" class="form">
     {%csrf_token%}
     <label for="username">Username (or) Email :</label><br>
     <input type="text" name="username"><br><br>
@@ -27,6 +21,11 @@
     <button type="submit" class="submit_button">Login</button><br><br>
     Don't have accout?<a href="{%url 'signup'%}">Signup</a>
   </form>
+  {%if messages%}
+    {%for message in messages%}
+      <p>{{message}}</p>
+    {%endfor%}
+  {%endif%}
   </div>
 </body>
 </html>
