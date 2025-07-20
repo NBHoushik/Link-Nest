@@ -13,4 +13,5 @@ urlpatterns = [
   path("update/<int:link_id>/",views.update,name="update"),
   path("u/<str:username>/",views.link_nest,name="link_nest"),
   path("qr_code/<str:username>/",views.qr_code,name="qr_code"),
+  path('profileImage/<str:username>',views.profileImage,name="profileImage"),
 ]

@@ -2,64 +2,97 @@
 <html lang="en">
 <head>
   <title>profile</title>
+  {%load static%}
+  <link rel="stylesheet" href="{%static 'links/css/profile.css'%}">
 </head>
 <body>
-  <div>
-      <img src="https://static.vecteezy.com/system/resources/previews/004/511/281/original/default-avatar-photo-placeholder-profile-picture-vector.jpg" alt="error" width="100px" >
-      <input type="image">
-  </div>
-  {{username}}
-<!-- Adding new link -->
-  <form method="post" action="{%url 'add_link_page' username%}">
-    {%csrf_token%}
-    <button type="submit">Add Links</button>
-  </form>
-<!-- public link -->
-    <div>
-      <input id="link" value="{{request.scheme}}://{{request.get_host}}/u/{{username}}/" readonly>
-      <button onclick="copyLink()">copy</button>
-      <div id="message"></div>
-      <!-- Generating qr code -->
-      <p>Your Qr</p>
-      <img src="{%url 'qr_code' username%}" alt="Qrcode" width="100px" id="Qr">
-      <button onclick="Download_Qr()">Download_Qr</button>
-      <!-- previewing public page -->
-      <a href="{%url 'link_nest' username%}">
-        <button >preview-page</button>
-      </a>
+  <div class="outer_container">
+  <!-- user Data -->
+  <div class="profile_data">
+    <h2>Your profile</h2>
+  <!-- userimage -->
+  <div class="profile">
+    <div class="original_image">
+      <img src="{{user.profile_link}}" alt="error" width="100px" ><br>
     </div>
+      <p class="profile_name">{{user.username}}</p>
+      <div id="image_container">
+        <button id="update_Image">updateImage</button><br>
+      </div> 
+  </div>
+   
+     <div class="update">
+      <!-- previewing public page -->
+       <a href="{%url 'link_nest' username%}">
+        <button class="preview_page">Preview Page</button>
+      </a>
+      <!-- Adding new link -->
+      <form method="post" action="{%url 'add_link_page' username%}">
+        {%csrf_token%}
+        <button type="submit" class="add_links">Add Links</button>
+      </form>
+     </div>
+      
 <!-- Existing links -->
-  <table border="1px">
+  <table class="data">
     <thead>
-      <th>Your Links</th>
+      <th>Links</th>
     </thead>
     <tbody>
       {%for link in user_links%}
       <tr>
         <td>
-          <a href="{{link.link}}">
-          <button>{{link.name}}</button>
-          </a>
-          {{link.description}}
-          <form method="post" action="{%url 'delete_update' link.id%}">
+          <div class="b_d">
+          <div class="b_d_d">
+            <a href="{{link.link}}">
+            <button class="link_button">{{link.name}}</button>
+            </a><br>
+            <p class="description">{{link.description}}</p>
+          </div>
+          </div>
+          <form method="post" action="{%url 'delete_update' link.id%}" class="control">
             {%csrf_token%}
-            <button type="submit" value="update" name="action">update</button>
-            <button type="submit" value="delete" name="action">delete</button>
+            <div class="u_d">
+            <button type="submit" value="update" name="action" class="action" id="update">update</button>
+            <button type="submit" value="delete" name="action" class="action" id="delete">delete</button>
+            </div>
+            
           </form>
         </td>  
       </tr>
       {%endfor%}
     </tbody>
   </table>
+  </div>
+  <!-- share options -->
+    <div class="share">
+      <div class="share_data">
+        <h2>Share options</h2>
+        <!-- public link -->
+        <div id="public_link">
+        <h4>public Link :</h4>
+        <input id="link" value="{{request.scheme}}://{{request.get_host}}/u/{{username}}/" readonly>
+        <button onclick="copyLink()" class="share_button">copy</button>
+        </div>
+        <!-- Generating qr code -->
+        <h4>Qr Code :</h4>
+        <img src="{%url 'qr_code' username%}" alt="Qrcode" width="100px" id="Qr"><br><br>
+        <button onclick="Download_Qr()" class="share_button">Download_Qr</button>
+      </div>
+    </div>
 
-  <!-- js code to copy the link to clipboard -->
+  </div>
    <script>
+    //js code to copy the link to clipboard 
     function copyLink(){
       const link=document.getElementById("link").value;
       navigator.clipboard.writeText(link)
-      const msg=document.getElementById("message");
-      msg.innerText="copied-to-clipboard"
+      const msg=document.createElement("p");
+      msg.innerText="copied-to-clipboard";
+      const d=document.getElementById("public_link");
+      d.appendChild(msg)
     }
+    //to download qr
     function Download_Qr(){
       const img=document.getElementById("Qr");
       const a=document.createElement('a');
@@ -69,6 +102,40 @@
       a.click()
       document.body.removeChild('a');
     }
+    //to update the profile image
+    const image=document.getElementById("update_Image")
+    image.addEventListener('click',function(){
+      const d=document.getElementById("image_container")
+      //avoiding multiple forms
+      if (document.getElementById("form"))return;
+      //creating form
+      const f=document.createElement("form");
+      f.method="post";
+      f.action="{%url 'profileImage' username%}";
+      f.id="form";
+      d.appendChild(f)
+
+      //csrrf token
+      const csrftoken='{{csrf_token}}';
+      //stroing csrf _token in the form
+      const csrfip=document.createElement("input");
+      csrfip.name="csrfmiddlewaretoken";
+      csrfip.value=csrftoken;
+      csrfip.type="hidden";
+      document.getElementById("form").appendChild(csrfip)
+      //creating input tag
+      const ip=document.createElement("input");
+      ip.type="url";
+      ip.placeholder="Enter image url";
+      ip.name="profile_Image";
+      f.appendChild(ip);
+      //creating a submit button
+      const b=document.createElement("button")
+      b.type="submit";
+      b.innerText="Update";
+      f.appendChild(b);
+    })
    </script>
+   
 </body>
 </html>

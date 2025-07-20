@@ -3,25 +3,33 @@
 <head>
 
   <title>Document</title>
+  {%load static%}
+  <link rel="stylesheet" href="{%static 'links/css/public_page.css'%}">
 </head>
 <body>
-  
-  <table>
+  <div class="outer_container">
+  <img src="{{user.profile_link}}" alt="Error" width="100px" class="image">
+  <table class="data">
     <thead>
-      <th>{{username}} Links</th>
+      <th>{{username}}</th>
     </thead>
     <tbody>
       {%for link in links%}
       <tr>
         <td>
+        
+          <div class="b_d_d">
           <a href="{{link.link}}">
-            <button>{{link.name}}</button>
+            <button class="link_button">{{link.name}}</button>
           </a>
-          {{link.description}}
+          <p class="para">{{link.description}}</p>
+          </div>
+
         </td>
       </tr>
       {%endfor%}
     </tbody>
   </table>
+  </div>
 </body>
 </html>

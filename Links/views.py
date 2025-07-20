@@ -51,13 +51,11 @@ def register_user(request):
       return redirect('index')
   return redirect('index')
   
-
-
 #showing links along with user data
 def profile_page(request,username):
   user=get_object_or_404(User,username=username)
   user_links=Link.objects.filter(user=user)
-  return render(request,"Links/profile.html",{"user_links":user_links,"username":username,"request":request})
+  return render(request,"Links/profile.html",{"user_links":user_links,"user":user,"username":username,"request":request})
 
 #adding new links page
 def add_link_page(request,username):
@@ -71,14 +69,14 @@ def add_link(request,username):
     link=request.POST.get("link")
     description=request.POST.get("description")
     if Link.objects.filter(link=link).exists():
-      messages.error(request,"Link alredy exists in profile")
+      messages.error(request,"Link already exists in profile")
       return redirect('add_link_page',username)
     else:
       Link.objects.create(user=user,name=linkname,link=link,description=description)
       messages.success(request,"Link added successfully")
   return redirect('add_link_page',username)
 
-#delete or update the exixting links
+#delete or update the existing links
 def delete_update(request,link_id):
   link=get_object_or_404(Link,id=link_id)
   username=link.user.username 
@@ -106,7 +104,7 @@ def update(request,link_id):
 def link_nest(request,username):
   user=get_object_or_404(User,username=username)
   user_links=Link.objects.filter(user=user)
-  return render(request,"Links/public_page.html",{"links":user_links,"username":username})
+  return render(request,"Links/public_page.html",{"links":user_links,"username":username,"user":user})
 
 #generating QR code for the super link
 def qr_code(request,username):
@@ -115,3 +113,10 @@ def qr_code(request,username):
   buffer = BytesIO()
   img.save(buffer,format="PNG")
   return HttpResponse(buffer.getvalue(),content_type='image/png')
+
+# updating a profile image
+def profileImage(request,username):
+  user=get_object_or_404(User,username=username)
+  if request.method=="POST":
+    user.profile_link=request.POST.get("profile_Image")
+    return redirect('profile_page',username)
